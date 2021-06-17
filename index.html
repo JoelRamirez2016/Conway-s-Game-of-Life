@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Game of Life</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style>
+		table, th, td {
+		  border: 1px solid black;
+		  border-collapse: collapse;
+		}
+		th, td {
+		  padding: 15px;
+		  text-align: left;
+		}
+	</style>
+</head>
+<body>
+	<table id="table_game">
+		<tbody>
+		</tbody>
+	</table>
+</body>
+<script type="text/javascript" src="game_of_life.js"></script>
+<script type="text/javascript">
+	let createTable = function(matrix) {
+		var row;
+
+		for (var i = 0; i < matrix.length; i++) {
+			row = $("<tr id='" + i + "'></tr>");
+			for (var j = 0; j < matrix[i].length; j++) {
+				col = $("<td id='"+ i + "" + j + "'></td>");
+				if (matrix[i][j])
+					col.css("background", "black");
+				row.append(col);
+			}
+			$("#table_game tbody").append(row);
+		}
+	}
+
+	let updateTable = function(matrix){
+		for (var i = 0; i < matrix.length; i++) {
+			for (var j = 0; j < matrix[i].length; j++) {
+				if (matrix[i][j])
+					$("#" + i + "" + j).css("background", "black");
+				else
+					$("#" + i + "" + j).css("background", "white");
+			}
+		}
+	}
+
+	let playGameOfLife = function() {
+		var i = 0;
+		var matrix = createRandomGameGrid(30);
+		createTable(matrix);
+		var intr = setInterval(function() {
+			console.log(matrix);
+			matrix = nextStateGame(matrix);
+			updateTable(matrix);
+			if (!cells(matrix) || ++i == 100) {
+				console.log(matrix);
+				updateTable(matrix);
+				clearInterval(intr);
+			}
+		}, 1000)
+
+	}
+	$(document).ready(function(){
+		playGameOfLife();
+	});
+</script>
+</html>
